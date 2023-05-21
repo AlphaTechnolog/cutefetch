@@ -11,6 +11,8 @@ void ram(void);
 void hostname(void);
 void disk(void);
 
+void display_colorpalette(void);
+
 int main() {
 	char (*banner)[50] = get_banner();
 	size_t max_len = 0;
@@ -39,6 +41,12 @@ int main() {
 			printf(" ");
 		missaligneds[i]();
 	}
+
+	for (size_t i = 0; i < max_len; i++)
+		printf(" ");
+
+	printf(" ");
+	display_colorpalette();
 
 	return 0;
 }
