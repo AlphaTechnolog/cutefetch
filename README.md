@@ -25,6 +25,7 @@ relevant information about your current running system.
 - sudo
 - uname (you should have it already installed)
 - your hostname at /etc/hostname (you may already have that file there)
+- A nerd font (to correctly render the glyphs at the color palette)
 
 ## Installation
 
