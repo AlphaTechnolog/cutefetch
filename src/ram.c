@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "colors.h"
 
@@ -41,5 +42,14 @@ void ram(void) {
 
 	used_mem = total_mem - free_mem;
 
-	printf("%s\n", format_bytes(used_mem));
+	char *str_usedmem = malloc(sizeof(char) * strlen(format_bytes(used_mem)) + 1);
+	char *str_totalmem = malloc(sizeof(char) * strlen(format_bytes(total_mem)) + 1);
+
+	sprintf(str_usedmem, "%s", format_bytes(used_mem));
+	sprintf(str_totalmem, "%s", format_bytes(total_mem));
+
+	printf("%s / %s\n", str_usedmem, str_totalmem);
+
+	free(str_usedmem);
+	free(str_totalmem);
 }

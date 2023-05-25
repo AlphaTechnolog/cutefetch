@@ -26,7 +26,7 @@ int main() {
 	header();
 
 	// rendering the aligneds functions relative to the banner size.
-	void (*aligneds[3])() = {os, kernel, ram};
+	void (*aligneds[3])() = {os, kernel, hostname};
 	for (int i = 0; i < 3; i++) {
 		prbannerrow(i);
 		aligneds[i]();
@@ -35,7 +35,7 @@ int main() {
 	// rendering the missaligneds ones
 	#define MISSALIGNED_SIZE 2
 
-	void (*missaligneds[MISSALIGNED_SIZE])() = {hostname, disk};
+	void (*missaligneds[MISSALIGNED_SIZE])() = {ram, disk};
 	for (int i = 0; i < MISSALIGNED_SIZE; i++) {
 		for (size_t j = 0; j < max_len; j++)
 			printf(" ");
