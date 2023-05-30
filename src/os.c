@@ -24,7 +24,7 @@ char *get_pretty_name(void) {
 				ptr += n;
 				char processed[1024];
 				strcpy(processed, strtok(ptr, "\"\n"));
-				sprintf(osname, processed);
+				sprintf(osname, "%s", processed);
 			} else {
 				sprintf(osname, "Cannot get os.");
 			}
