@@ -28,8 +28,8 @@ void disk(void) {
 	char *strtotal = malloc(sizeof(char) * 120);
 	char *strused = malloc(sizeof(char) * 120);
 
-	sprintf(strtotal, format_bytes(total_space));
-	sprintf(strused, format_bytes(used_space));
+	sprintf(strtotal, "%s", format_bytes(total_space));
+	sprintf(strused, "%s", format_bytes(used_space));
 
 	printf("%s / %s\n", strused, strtotal);
 
