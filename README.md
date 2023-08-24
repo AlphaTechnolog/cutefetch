@@ -29,6 +29,16 @@ relevant information about your current running system.
 
 ## Installation
 
+In an arch system you can build it by using your preferred aur helper such as yay per example
+
+```sh
+yay -S cutefetch
+```
+
+> Another package managers are still WIP, contributions 4 packaging and others are welcome aswell :)
+
+## Manual building
+
 Run a little list of shell script commands.
 
 ```sh
