@@ -1,31 +1,25 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <errno.h>
+#include <ctype.h>
 #include <string.h>
+#include <sys/utsname.h>
 
 #include "colors.h"
 
 char *catch_kerver(void) {
-	char buffer[1024];
+    struct utsname buffer;
 
-	FILE *fp = popen("uname -r", "r");
-	if (fp == NULL) {
-		fprintf(stderr, "Cannot get the kernel version, do you have uname installed??\n");
-		exit(1);
-	}
+    errno = 0;
+    if (uname(&buffer) != 0) {
+        perror("uname");
+        exit(EXIT_FAILURE);
+    }
 
-	char *kernel_version = malloc(sizeof(char) * 1024);
-	kernel_version[0] = '\0';
+    char *release = malloc(sizeof(char) * strlen(buffer.release));
+    sprintf(release, "%s", buffer.release);
 
-	while (fgets(buffer, sizeof(buffer), fp) != NULL)
-		strcat(kernel_version, buffer);
-
-	pclose(fp);
-
-	int n = strlen(kernel_version);
-	if (n > 0 && kernel_version[n - 1] == '\n')
-		kernel_version[n - 1] = '\0';
-
-	return kernel_version;
+    return release;
 }
 
 void kernel(void) {
