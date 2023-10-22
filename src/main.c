@@ -8,8 +8,7 @@
 #include "system/kernel.h"
 #include "system/ram.h"
 #include "system/hostname.h"
-
-void disk(void);
+#include "system/disk.h"
 
 void display_colorpalette(void);
 
@@ -35,11 +34,11 @@ int main() {
 	// rendering the missaligneds ones
 	#define MISSALIGNED_SIZE 2
 
-	void (*missaligneds[MISSALIGNED_SIZE])() = {ram, disk};
+	void (*missaligneds[MISSALIGNED_SIZE])(size_t offset) = {ram, disk};
 	for (int i = 0; i < MISSALIGNED_SIZE; i++) {
 		for (size_t j = 0; j < max_len; j++)
 			printf(" ");
-		missaligneds[i]();
+		missaligneds[i](max_len);
 	}
 
 	for (size_t i = 0; i < max_len; i++)

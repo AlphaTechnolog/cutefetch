@@ -3,9 +3,5 @@
 
 #include "utils.h"
 
-void malloc_check(void *res) {
-    if (res == NULL) {
-        perror("malloc");
-        exit(EXIT_FAILURE);
-    }
-}
+FUN_CHECK(malloc)
+FUN_CHECK(realloc)
