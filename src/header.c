@@ -6,9 +6,10 @@
 #include <pwd.h>
 
 #include "colors.h"
-#include "hostname.h"
+#include "header.h"
+#include "system/hostname.h"
 
-char *whoami(void) {
+static inline char *whoami(void) {
     struct passwd *passwd = getpwuid(getuid());
     return passwd->pw_name;
 }

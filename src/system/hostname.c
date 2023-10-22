@@ -1,15 +1,18 @@
+#define _DEFAULT_SOURCE
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
 
-#include "colors.h"
 #include "hostname.h"
 
-#define DEFAULT_HOSTNAME "localhost"
+#include "../utils.h"
+#include "../colors.h"
 
 char *get_hostname(void) {
     char *hostname = malloc(sizeof(char) * 1024);
+    malloc_check(hostname);
     gethostname(hostname, 1023);
     return hostname;
 }

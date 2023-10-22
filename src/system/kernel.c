@@ -5,9 +5,10 @@
 #include <string.h>
 #include <sys/utsname.h>
 
-#include "colors.h"
+#include "kernel.h"
+#include "../colors.h"
 
-char *catch_kerver(void) {
+static inline char *catch_kerver(void) {
     struct utsname buffer;
 
     errno = 0;

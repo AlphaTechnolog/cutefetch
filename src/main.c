@@ -1,14 +1,14 @@
 #include <stdio.h>
 #include <string.h>
 
-void prbannerrow(int row);
-char (*get_banner())[50];
+#include "banner.h"
+#include "header.h"
 
-void header(void);
-void os(void);
-void kernel(void);
-void ram(void);
-void hostname(void);
+#include "system/os.h"
+#include "system/kernel.h"
+#include "system/ram.h"
+#include "system/hostname.h"
+
 void disk(void);
 
 void display_colorpalette(void);

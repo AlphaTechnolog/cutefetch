@@ -2,9 +2,11 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "colors.h"
+#include "os.h"
 
-char *get_pretty_name(void) {
+#include "../colors.h"
+
+static char *get_pretty_name(void) {
 	char buffer[2024];
 
 	FILE *fp = fopen("/etc/os-release", "r");

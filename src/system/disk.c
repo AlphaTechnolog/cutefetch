@@ -2,9 +2,9 @@
 #include <stdlib.h>
 #include <sys/statvfs.h>
 
-#include "colors.h"
-
-const char *format_bytes(long long bytes);
+#include "ram.h"
+#include "disk.h"
+#include "../colors.h"
 
 void disk(void) {
 	printf(" %sdsk%s ", RED, RESET);

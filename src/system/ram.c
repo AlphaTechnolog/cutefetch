@@ -2,7 +2,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "colors.h"
+#include "ram.h"
+
+#include "../colors.h"
 
 const char *format_bytes(long long bytes) {
 	const char* units[] = {"B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"};

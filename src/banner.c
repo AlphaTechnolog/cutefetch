@@ -2,11 +2,12 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "banner.h"
 #include "colors.h"
 
 #define BANNER_MAX_ROWS 3
 
-char (*get_banner())[50] {
+char (*get_banner(void))[50] {
 	static char banner[BANNER_MAX_ROWS][50] = {
 		"(\\__/)",
 		"(='.'=)",
@@ -16,7 +17,7 @@ char (*get_banner())[50] {
 	return banner;
 }
 
-char *get_banner_row(int row) {
+static char *get_banner_row(int row) {
 	if (row > BANNER_MAX_ROWS) {
 		fprintf(stderr, "Invalid given row\n");
 		exit(1);
