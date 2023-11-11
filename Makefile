@@ -33,7 +33,6 @@ clean:
 	rm -rf $(OBJDIR) $(BINDIR)
 
 install: $(TARGET)
-	mkdir -pv $(INSTALLDIR)
 	install -Dm755 $< $(INSTALLDIR)/$(APPNAME)
 
 uninstall:
