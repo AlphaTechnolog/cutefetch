@@ -16,7 +16,7 @@ char *catch_kerver(void) {
         exit(EXIT_FAILURE);
     }
 
-    char *release = malloc(sizeof(char) * strlen(buffer.release));
+    char *release = malloc(sizeof(char) * (strlen(buffer.release) + 1));
     sprintf(release, "%s", buffer.release);
 
     return release;
