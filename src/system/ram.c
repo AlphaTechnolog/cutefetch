@@ -2,11 +2,13 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "colors.h"
+#include "ram.h"
+
+#include "../colors.h"
 
 const char *format_bytes(long long bytes) {
 	const char* units[] = {"B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"};
-	int i = 0;
+	size_t i = 0;
 	double val = (double) bytes;
 	while (val >= 1024.0 && i < sizeof(units) / sizeof(units[0])) {
 		val /= 1024.0;
@@ -18,7 +20,7 @@ const char *format_bytes(long long bytes) {
 	return buf;
 }
 
-void ram(void) {
+void ram(size_t offset) {
 	printf(" %sram%s ", MAGENTA, RESET);
 
 	FILE *fp = fopen("/proc/meminfo", "r");

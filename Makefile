@@ -1,39 +1,43 @@
-CC = gcc
-CFLAGS = -Wall -Wextra -Wpedantic
-APPNAME = cutefetch
+CC := gcc
 
-SRCDIR = src
-OBJDIR = obj
-BINDIR = bin
+MINGW := $(shell expr "$(UNAME_S)" : 'MINGW')
 
-PREFIX=/usr
-INSTALLDIR = $(PREFIX)/bin
+CFLAGS := -std=c11 -O3 -g -Wall -Wextra -Wpedantic -Wstrict-aliasing
+CFLAGS += -Wno-pointer-arith -Wno-unused-parameter -Wno-newline-eof -Wno-unused-parameter -Wno-gnu-statement-expression
+CFLAGS += -Wno-gnu-compound-literal-initializer -Wno-gnu-zero-variadic-macro-arguments
 
-SRCFILES = $(wildcard $(SRCDIR)/*.c)
-OBJFILES = $(addprefix $(OBJDIR)/,$(notdir $(SRCFILES:.c=.o)))
-TARGET = $(BINDIR)/${APPNAME}
+LDFLAGS := -lc -lm
+PREFIX := /usr/local/bin
+
+SRC := $(wildcard src/**/*.c) $(wildcard src/*.c) $(wildcard src/**/**/*.c) $(wildcard src/**/**/**/*.c)
+OBJ := $(SRC:.c=.o)
+BIN := bin
+
+APPNAME := cutefetch
 
 .PHONY: all clean
 
-all: $(TARGET)
+all: dirs app
 
-$(TARGET): $(OBJFILES) | $(BINDIR)
-	$(CC) $(CFLAGS) $^ -o $@
+dirs:
+	mkdir -p $(BIN)
 
-$(OBJDIR)/%.o: $(SRCDIR)/%.c | $(OBJDIR)
-	$(CC) $(CFLAGS) -c $< -o $@
+run: all
+	$(BIN)/$(APPNAME)
 
-$(BINDIR):
-	mkdir $(BINDIR)
+app: $(OBJ)
+	$(CC) -o $(BIN)/$(APPNAME) $^ $(LDFLAGS)
+	strip $(BIN)/$(APPNAME)
 
-$(OBJDIR):
-	mkdir $(OBJDIR)
+%.o: %.c
+	$(CC) -o $@ -c $< $(CFLAGS)
 
 clean:
-	rm -rf $(OBJDIR) $(BINDIR)
+	rm -rf $(BIN) $(OBJ)
 
-install: $(TARGET)
-	install -Dm755 $< $(INSTALLDIR)/$(APPNAME)
+install: $(BIN)/$(APPNAME)
+	mkdir -pv $(PREFIX)
+	install -Dm755 $< $(PREFIX)/$(APPNAME)
 
 uninstall:
-	rm -fv $(INSTALLDIR)/$(APPNAME)
+	rm -fv $(PREFIX)/$(APPNAME)
