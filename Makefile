@@ -1,5 +1,3 @@
-CC := gcc
-
 MINGW := $(shell expr "$(UNAME_S)" : 'MINGW')
 
 CFLAGS := -std=c11 -O3 -g -Wall -Wextra -Wpedantic -Wstrict-aliasing
