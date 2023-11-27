@@ -12,14 +12,14 @@ relevant information about your current running system.
 - Bunny banner
 - Os name
 - Kernel version
-- Current used ram (Todo: Show the total ram)
+- Current used ram
 - Hostname
-- Disk: Used disk space / Total disk space
+- Disk: Used disk space / Total disk space (Shows mountpoints)
 - Color palette
 
 ## Requirements
 
-- gcc
+- gcc / clang
 - gnumake
 - git
 - sudo
@@ -37,6 +37,8 @@ yay -S cutefetch
 
 > Another package managers are still WIP, contributions 4 packaging and others are welcome aswell :)
 
+**Note**: Aur package is down atm, since the change from `PREFIX` to `DESTDIR` in the `Makefile`.
+
 ## Manual building
 
 Run a little list of shell script commands.
@@ -52,22 +54,31 @@ in your terminal screen :)
 
 ## Compilation tricks
 
-You can also set a prefix on where you wanna install cutefetch.
+You may want to build it using clang, you can do it by overriding the
+`CC` variable:
 
 ```sh
-sudo make PREFIX=/usr/local install
-sudo make PREFIX=/usr/local uninstall
+sudo make CC=clang DESTDIR=/usr/bin all install
+```
+
+You can also set a destdir on where you wanna install cutefetch.
+
+```sh
+sudo make DESTDIR=/usr/bin install
+sudo make DESTDIR=/usr/local/bin install
+sudo make DESTIDR=/usr/local/bin uninstall
+# ...
 ```
 
 ## Dev notes
 
-- Cleaning up the file tree
+- Cleaning the file tree
 
 ```sh
 make clean
 ```
 
-> if you already have run `sudo make install` without having the program compiled you may have to run
+> if you already have ran `sudo make install` without having the program compiled you may have to run
 
 ```sh
 sudo make clean
