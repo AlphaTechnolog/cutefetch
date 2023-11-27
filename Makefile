@@ -5,7 +5,7 @@ CFLAGS += -Wno-pointer-arith -Wno-unused-parameter -Wno-newline-eof -Wno-unused-
 CFLAGS += -Wno-gnu-compound-literal-initializer -Wno-gnu-zero-variadic-macro-arguments
 
 LDFLAGS := -lc -lm
-PREFIX := /usr/local/bin
+DESTDIR := /usr/bin
 
 SRC := $(wildcard src/**/*.c) $(wildcard src/*.c) $(wildcard src/**/**/*.c) $(wildcard src/**/**/**/*.c)
 OBJ := $(SRC:.c=.o)
@@ -34,8 +34,8 @@ clean:
 	rm -rf $(BIN) $(OBJ)
 
 install: $(BIN)/$(APPNAME)
-	mkdir -pv $(PREFIX)
-	install -Dm755 $< $(PREFIX)/$(APPNAME)
+	mkdir -pv $(DESTDIR)
+	install -Dm755 $< $(DESTDIR)/$(APPNAME)
 
 uninstall:
-	rm -fv $(PREFIX)/$(APPNAME)
+	rm -fv $(DESTDIR)/$(APPNAME)
