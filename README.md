@@ -45,7 +45,7 @@ Include the repository by following the next commands:
 ```sh
 emerge -av app-eselect/eselect-repository
 eselect repository add lunatic_repository git https://gitlab.com/Alxhr0/lunatic_repository.git
-emerge --sync
+emerge --sync lunatic_repository
 ```
 
 And now you can install it by unmasking it and accepting the license:
