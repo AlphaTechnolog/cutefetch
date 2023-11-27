@@ -37,7 +37,7 @@ yay -S cutefetch
 
 **Note**: Aur package is down atm, since the change from `PREFIX` to `DESTDIR` in the `Makefile`.
 
-Or, if you're running gentoo, you could use the Alxhr0's lunatic repository which includes an
+Or, if you're running gentoo, you could use the [Alxhr0's](https://github.com/Alxhr0) lunatic repository which includes an
 ebuild for cutefetch, check it out [here](https://gitlab.com/Alxhr0/lunatic_repository).
 
 Include the repository by following the next commands:
