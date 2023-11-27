@@ -35,9 +35,28 @@ In an arch system you can build it by using your preferred aur helper such as ya
 yay -S cutefetch
 ```
 
-> Another package managers are still WIP, contributions 4 packaging and others are welcome aswell :)
-
 **Note**: Aur package is down atm, since the change from `PREFIX` to `DESTDIR` in the `Makefile`.
+
+Or, if you're running gentoo, you could use the Alxhr0's lunatic repository which includes an
+ebuild for cutefetch, check it out [here](https://gitlab.com/Alxhr0/lunatic_repository).
+
+Include the repository by following the next commands:
+
+```sh
+emerge -av app-eselect/eselect-repository
+eselect repository add lunatic_repository git https://gitlab.com/Alxhr0/lunatic_repository.git
+emerge --sync
+```
+
+And now you can install it by unmasking it and accepting the license:
+
+```sh
+echo 'app-misc/cutefetch **' >> /etc/portage/package.accept_keywords/cutefetch
+echo 'app-misc/cutefetch all-rights-reserved' >> /etc/portage/package.license/cutefetch
+emerge -av app-misc/cutefetch
+```
+
+> Others package managers are WIP atm, if you want, you could contribute by packaging cutefetch to your fav distro
 
 ## Manual building
 
