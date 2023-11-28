@@ -29,15 +29,17 @@ relevant information about your current running system.
 
 ## Installation
 
+### For arch-based systems
+
 In an arch system you can build it by using your preferred aur helper such as yay per example
 
 ```sh
 yay -S cutefetch
 ```
 
-**Note**: Aur package is down atm, since the change from `PREFIX` to `DESTDIR` in the `Makefile`.
+### Gentoo systems
 
-Or, if you're running gentoo, you could use the [Alxhr0's](https://github.com/Alxhr0) lunatic repository which includes an
+When running gentoo, you could use the [Alxhr0's](https://github.com/Alxhr0) lunatic repository which includes an
 ebuild for cutefetch, check it out [here](https://gitlab.com/Alxhr0/lunatic_repository).
 
 Include the repository by following the next commands:
@@ -56,7 +58,12 @@ echo 'app-misc/cutefetch all-rights-reserved' >> /etc/portage/package.license/cu
 emerge -av app-misc/cutefetch
 ```
 
-> Others package managers are WIP atm, if you want, you could contribute by packaging cutefetch to your fav distro
+### Others package managers
+
+We're searching for contributors for packaging cutefetch on others distros, if you like cutefetch
+but it's not available in your distro, you could try packaging it for it, or adding a suggestion in the issues tab ;)
+
+Else, you can try manually building it, it's easy :)
 
 ## Manual building
 
@@ -108,6 +115,10 @@ sudo make clean
 ```sh
 make clean all
 ```
+
+## Thanks to
+
+- [Alxhr0](https://github.com/Alxhr0): Who've built & tested cutefetch on others distros and packaged it for gentoo.
 
 ## Enjoy
 
