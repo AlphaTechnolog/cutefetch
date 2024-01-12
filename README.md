@@ -39,7 +39,7 @@ yay -S cutefetch
 
 ### Gentoo systems
 
-When running gentoo, you could use the [Alxhr0's](https://github.com/Alxhr0) lunatic repository which includes an
+When running gentoo, you could use the [Alxhr0's](https://github.com/Alxhr0) andromeda repository which includes an
 ebuild for cutefetch, check it out [here](https://gitlab.com/Alxhr0/andromeda).
 
 Include the repository by following the next commands:
