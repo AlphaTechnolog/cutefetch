@@ -40,14 +40,14 @@ yay -S cutefetch
 ### Gentoo systems
 
 When running gentoo, you could use the [Alxhr0's](https://github.com/Alxhr0) lunatic repository which includes an
-ebuild for cutefetch, check it out [here](https://gitlab.com/Alxhr0/lunatic_repository).
+ebuild for cutefetch, check it out [here](https://gitlab.com/Alxhr0/andromeda).
 
 Include the repository by following the next commands:
 
 ```sh
 emerge -av app-eselect/eselect-repository
-eselect repository add lunatic_repository git https://gitlab.com/Alxhr0/lunatic_repository.git
-emerge --sync lunatic_repository
+eselect repository add andromeda git https://gitlab.com/Alxhr0/andromeda.git
+emerge --sync andromeda
 ```
 
 And now you can install it by unmasking it and accepting the license:
