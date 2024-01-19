@@ -29,7 +29,7 @@ relevant information about your current running system.
 
 ## Installation
 
-### For arch-based systems
+### Arch Linux
 
 In an arch system you can build it by using your preferred aur helper such as yay per example
 
@@ -37,7 +37,46 @@ In an arch system you can build it by using your preferred aur helper such as ya
 yay -S cutefetch
 ```
 
-### Gentoo systems
+### NixOS
+
+For NixOS you could use the provided flake and then install the exposed package at
+`cutefetch.packages.${pkgs.system}.default`. Take as reference the next dev shell which provides
+a cutefetch installation.
+
+```nix
+{
+  inputs = {
+    nixpkgs.url = "github:nixos/nixpkgs";
+    flake-utils.url = "github:numtide/flake-utils";
+    cutefetch.url = "github:AlphaTechnolog/cutefetch";
+  };
+
+  outputs = { self, nixpkgs, flake-utils, ... } @inputs: flake-utils.lib.eachDefaultSystem(system: let
+    pkgs = import nixpkgs {
+      inherit system;
+      overlays = [
+        (_: prev: (with inputs; {
+          cutefetch = cutefetch.packages.${prev.system}.default;
+        }))
+      ];
+    };
+  in (with pkgs; {
+    devShells.default = mkShell {
+      buildInputs = [cutefetch];
+    };
+  }));
+}
+```
+
+Then if you execute `nix develop` in the folder where that `flake.nix` file is, you will
+get a shell where you can execute `cutefetch`.
+
+So, if you're using NixOS, import the cutefetch flake in your inputs, make an overlay,
+just like in the example, and then use home.packages if you're using home manager
+or environment.systemPackages for system wide install to make cutefetch available in your
+system.
+
+### Gentoo Linux
 
 When running gentoo, you could use the [Alxhr0's](https://github.com/Alxhr0) andromeda repository which includes an
 ebuild for cutefetch, check it out [here](https://gitlab.com/Alxhr0/andromeda).
