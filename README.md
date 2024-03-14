@@ -2,7 +2,9 @@
 
 cutefetch is adopting zig now!!
 
-This branch is the WIP implementation, you can try it out if you want :)
+![banner](./assets/banner.png)
+
+> This branch is the WIP implementation, you can try it out if you want :)
 
 ## Installation
 
