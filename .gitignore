@@ -1,3 +1,2 @@
-obj
-bin
-*.o
+zig-out
+zig-cache
