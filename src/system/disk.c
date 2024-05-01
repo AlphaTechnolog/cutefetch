@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <mntent.h>
 #include <string.h>
+#include <stdbool.h>
 #include <sys/statvfs.h>
 
 #include "ram.h"
@@ -55,6 +56,32 @@ static inline void free_disk_usage(struct DiskUsage *usage) {
 	free(usage);
 }
 
+static inline bool startswith(const char *pre, const char *str) {
+    return strncmp(pre, str, strlen(pre)) == 0;
+}
+
+#define EXCEPTIONS_LENGTH 4
+static inline bool in_exception_mountpoint(const char *mountpoint) {
+	const char *exceptions_queries[] = {
+		"/bedrock",
+		"/home",
+		"/root",
+		"/tmp"
+	};
+
+	bool result = false;
+
+	for (int i = 0; i < EXCEPTIONS_LENGTH; ++i) {
+		const char *query = exceptions_queries[i];
+		if (startswith(query, mountpoint)) {
+			result = true;
+			break;
+		}
+	}
+
+	return result;
+}
+
 static struct Mounts *get_mnts(void) {
 	FILE *mounts_file = setmntent("/etc/mtab", "r");
 	if (mounts_file == NULL) {
@@ -84,6 +111,10 @@ static struct Mounts *get_mnts(void) {
             strcmp(mount_entry->mnt_type, "vfat") != 0) {
             continue;
         }
+
+		if (in_exception_mountpoint(mount_entry->mnt_dir)) {
+			continue;
+		}
 
 		if (mounts->length + 1 >= mounts->capacity) {
 			mounts->capacity *= 2;

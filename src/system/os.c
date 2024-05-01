@@ -4,10 +4,18 @@
 
 #include "os.h"
 
+#include "../bedrock.h"
 #include "../colors.h"
 
 static char *get_pretty_name(void) {
 	char buffer[2024];
+
+	if (is_bedrock()) {
+		const char *pretty = "Bedrock";
+		char *tmp = malloc(strlen(pretty) + 1);
+		strcpy(tmp, pretty);
+		return tmp;
+	}
 
 	FILE *fp = fopen("/etc/os-release", "r");
 	if (fp == NULL) {
