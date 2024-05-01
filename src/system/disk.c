@@ -60,13 +60,14 @@ static inline bool startswith(const char *pre, const char *str) {
     return strncmp(pre, str, strlen(pre)) == 0;
 }
 
-#define EXCEPTIONS_LENGTH 4
+#define EXCEPTIONS_LENGTH 5
 static inline bool in_exception_mountpoint(const char *mountpoint) {
 	const char *exceptions_queries[] = {
 		"/bedrock",
 		"/home",
 		"/root",
-		"/tmp"
+		"/tmp",
+		"/usr"
 	};
 
 	bool result = false;
