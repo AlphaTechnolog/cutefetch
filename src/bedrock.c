@@ -7,7 +7,7 @@
 bool is_bedrock(void) {
     DIR *bedrock = opendir("/bedrock");
 
-    if (ENOENT == errno || !bedrock) {
+    if (errno == ENOENT || !bedrock) {
         return false;
     }
 
