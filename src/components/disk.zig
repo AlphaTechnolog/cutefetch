@@ -9,32 +9,40 @@ const process = std.process;
 const stdout = io.getStdOut().writer();
 const stderr = io.getStdErr().writer();
 
-// fn printDiskInformation(allocator: mem.Allocator) !void {
-//     var disk = try System.Disk.fromMountpoint(allocator, "/");
-//     defer disk.deinit();
-//     try stdout.print("{s} / {s}", .{disk.used_size, disk.total_size});
-//     try stdout.print(" ({s}/{s})\n", .{static.Cyan, static.Reset});
-// }
+fn printSystemInformation(allocator: mem.Allocator) !void {
+    var disk = try System.Disk.fromMountpoint(allocator, "/");
+    defer disk.deinit();
+    try stdout.print("{s} / {s}", .{ disk.used_size, disk.total_size });
+    try stdout.print(" ({s}/{s})\n", .{ static.Cyan, static.Reset });
+}
 
 pub fn renderDisk(allocator: mem.Allocator) void {
-    stdout.print("{s}dsk {s}", .{
-        static.Red,
-        static.Reset
-    }) catch unreachable;
+    stdout.print("{s}dsk {s}", .{ static.Red, static.Reset }) catch unreachable;
 
-    var disks = System.Disks.init(allocator) catch unreachable;
-    defer disks.deinit();
+    printSystemInformation(allocator) catch |err| {
+        stderr.print("Cannot obtain disk information from '/': {s}\n", .{@errorName(err)}) catch unreachable;
+        process.exit(1);
+    };
 
-    for (disks.mountpoints.items) |mnt| {
-        var disk = System.Disk.fromMountpoint(allocator, mnt) catch unreachable;
-        defer disk.deinit();
-    }
+    // FIXME: For some reason, when we pass that `mnt` variable, statvfs64 fails with a weird error
+    // of NAMETOOLONG in the errno buffer :skull: tbh, no idea here, because passing literal "/" works.
+    // HINT: Prolly skill issue though.
 
-    // var disk = System.Disk.fromMountpoint(allocator, "/") catch unreachable;
-    // defer disk.deinit();
+    // var disks = System.Disks.init(allocator) catch unreachable;
+    // defer disks.deinit();
 
-    // printDiskInformation(allocator) catch |err| {
-    //     stderr.print("Cannot obtain disk information from '/': {s}\n", .{@errorName(err)}) catch unreachable;
-    //     process.exit(1);
-    // };
+    // for (disks.mountpoints.items) |raw_mnt| {
+    //     const mnt = try allocator.dupe(u8, raw_mnt);
+    //     defer allocator.free(mnt);
+
+    //     const disk = System.Disk.fromMountpoint(allocator, mnt) catch |err| {
+    //         try stderr.print("cannot fetch information for mountpoint {s} -> {s}\n", .{
+    //             mnt, @errorName(err)
+    //         });
+
+    //         std.process.exit(1);
+    //     };
+
+    //     defer disk.deinit();
+    // }
 }

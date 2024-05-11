@@ -2,6 +2,7 @@ const std = @import("std");
 const utils = @import("../utils.zig");
 
 const c = @cImport({
+    @cDefine("_LARGEFILE64_SOURCE", "");
     @cInclude("stdlib.h");
     @cInclude("mntent.h");
     @cInclude("sys/statvfs.h");
@@ -31,24 +32,17 @@ pub const Disk = struct {
     pub fn fromMountpoint(allocator: mem.Allocator, mountpoint: []const u8) !*Self {
         var instance = try allocator.create(Self);
         instance.allocator = allocator;
-        instance.mountpoint = mountpoint;
-        try instance.fetchUsage();
+        // instance.mountpoint = mountpoint;
+        try instance.fetchUsage(mountpoint);
         return instance;
     }
 
-    pub fn fetchUsage(self: *Self) !void {
-        var fs_info: c.struct_statvfs = undefined;
+    pub fn fetchUsage(self: *Self, mnt: []const u8) !void {
+        var fs_info: c.struct_statvfs64 = undefined;
 
-        const mnt: []const u8 = @as([]const u8, try self.allocator.dupe(u8, self.mountpoint));
-        defer self.allocator.free(mnt);
-
-        if (c.statvfs(mnt.ptr, &fs_info) != 0) {
-            var errno = std.c.getErrno(-1);
-
-            debug.panic("Failed to call `statvfs()` on `{s}`: {d}\n", .{
-                self.mountpoint,
-                errno
-            });
+        if (c.statvfs64(mnt.ptr, &fs_info) != 0) {
+            const errno = std.c.getErrno(-1);
+            debug.panic("Failed to call `statvfs()` on `{s}`: {d}\n", .{ mnt, errno });
         }
 
         self.used_bytes = (fs_info.f_blocks - fs_info.f_bfree) * fs_info.f_frsize;
@@ -78,12 +72,12 @@ pub const Disks = struct {
         return instance;
     }
 
-    pub const MountsFetchingErrors = fmt.AllocPrintError || error {
+    pub const MountsFetchingErrors = fmt.AllocPrintError || error{
         FailedMtabOpening,
     };
 
     fn fetchMounts(self: *Self) MountsFetchingErrors!void {
-        var mounts_file: ?*c.FILE = c.setmntent("/etc/mtab", "r");
+        const mounts_file: ?*c.FILE = c.setmntent("/etc/mtab", "r");
         defer _ = c.endmntent(mounts_file);
 
         if (mounts_file == null) {
@@ -93,20 +87,18 @@ pub const Disks = struct {
         self.mountpoints = ArrayList([]u8).init(self.allocator);
 
         while (true) {
-            var mnt = c.getmntent(mounts_file);
+            const mnt = c.getmntent(mounts_file);
 
             if (mnt == null) {
                 break;
             }
 
-            var mnt_type: []u8 = try fmt.allocPrint(self.allocator, "{s}", .{mnt.*.mnt_type});
-            var mnt_dir: []u8 = try fmt.allocPrint(self.allocator, "{s}", .{mnt.*.mnt_dir});
+            const mnt_type: []u8 = try fmt.allocPrint(self.allocator, "{s}", .{mnt.*.mnt_type});
+            const mnt_dir: []u8 = try fmt.allocPrint(self.allocator, "{s}", .{mnt.*.mnt_dir});
 
             defer self.allocator.free(mnt_type);
 
-            var valid_fs_types = [_][]const u8 {
-                "ext2", "ext3", "ext4", "xfs", "btrfs", "zfs", "vfat", "ntfs"
-            };
+            const valid_fs_types = [_][]const u8{ "ext2", "ext3", "ext4", "xfs", "btrfs", "zfs", "vfat", "ntfs" };
 
             var is_valid_fs: bool = false;
 
