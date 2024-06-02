@@ -53,7 +53,7 @@ overlay. Take as reference the next dev shell which provides a cutefetch install
   outputs = { self, nixpkgs, flake-utils, ... } @inputs: flake-utils.lib.eachDefaultSystem(system: let
     pkgs = import nixpkgs rec {
       inherit system;
-      overlays = [cutefetch.overlays.${system}.default];
+      overlays = [inputs.cutefetch.overlays.${system}.default];
     };
   in (with pkgs; {
     devShells.default = mkShell {
