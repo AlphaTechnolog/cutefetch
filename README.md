@@ -39,9 +39,8 @@ yay -S cutefetch
 
 ### NixOS
 
-For NixOS you could use the provided flake and then install the exposed package at
-`cutefetch.packages.${pkgs.system}.default`. Take as reference the next dev shell which provides
-a cutefetch installation.
+For NixOS you could use the provided flake and then install the exposed package in the default
+overlay. Take as reference the next dev shell which provides a cutefetch installation.
 
 ```nix
 {
@@ -52,13 +51,9 @@ a cutefetch installation.
   };
 
   outputs = { self, nixpkgs, flake-utils, ... } @inputs: flake-utils.lib.eachDefaultSystem(system: let
-    pkgs = import nixpkgs {
+    pkgs = import nixpkgs rec {
       inherit system;
-      overlays = [
-        (_: prev: (with inputs; {
-          cutefetch = cutefetch.packages.${prev.system}.default;
-        }))
-      ];
+      overlays = [cutefetch.overlays.${system}.default];
     };
   in (with pkgs; {
     devShells.default = mkShell {
