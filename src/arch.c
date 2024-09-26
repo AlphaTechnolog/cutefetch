@@ -1,22 +1,22 @@
 #include <stdio.h>
 #include <sys/utsname.h>
 
-#include "kernel.h"
-#include "colors.h"
+#include "arch.h"
 #include "utils.h"
+#include "colors.h"
 
 /**
- * Entry point for the kernel module. This prints the
- * ker: <version> part.
+ * Entry point for the architecture module. This prints the
+ * arch: <arch> part.
  *
  * void *prm: The already filled utsname structure.
  */
-void module_kernel_init(void *prm)
+void module_arch_init(void *prm)
 {
 	struct utsname *sutsname_buf;
 
 	if (!(sutsname_buf = (struct utsname*)prm))
 		fatal("Unable to obtain utsname buffer");
 
-	printf("%sker%s  %s\n", BLUE, RESET, sutsname_buf->release);
+	printf("%sarch%s %s\n", YELLOW, RESET, sutsname_buf->machine);
 }

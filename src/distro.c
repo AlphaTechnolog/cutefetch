@@ -43,5 +43,5 @@ void module_distro_init(void *prm)
 
 	fclose(fp);
 
-	printf("%sos  %s%s\n", GREEN, RESET, pretty_name);
+	printf("%sos   %s%s\n", GREEN, RESET, pretty_name);
 }
