@@ -70,3 +70,20 @@ void format_time(long unsigned milliseconds, char *buf)
 	else
 		sprintf(buf, "%d second(s)", seconds);
 }
+
+/**
+ * Prints a given character x times.
+ *
+ * NOTE: Doesn't appends \n in stdout.
+ *
+ * size_t times: Times to print `chr`.
+ * char chr: Character to print.
+ */
+void printxtimes(size_t times, char chr)
+{
+	int i;
+	char fmtted[] = { chr, 0 };
+
+	for (i = 0; i < times; ++i)
+		fputs(fmtted, stdout);
+}

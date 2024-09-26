@@ -16,27 +16,10 @@
 #include "arch.h"
 #include "ram.h"
 #include "uptime.h"
+#include "mnts.h"
 
-static void printxtimes(size_t, char);
 static void hmodprint(size_t, void (*)(void*), void *prm);
 static void modprint(int*, size_t, size_t, void (*)(void*), void *prm);
-
-/**
- * Prints a given character x times.
- *
- * NOTE: Doesn't appends \n in stdout.
- *
- * size_t times: Times to print `chr`.
- * char chr: Character to print.
- */
-void printxtimes(size_t times, char chr)
-{
-	int i;
-	char fmtted[] = { chr, 0 };
-
-	for (i = 0; i < times; ++i)
-		fputs(fmtted, stdout);
-}
 
 /**
  * Prints a given module without printing its current banner iteration.
@@ -120,6 +103,7 @@ int main()
 	modprint(&i, bannerlen, banneroffset, module_simple_hostname_init, NULL);
 	modprint(&i, bannerlen, banneroffset, module_ram_init, NULL);
 	modprint(&i, bannerlen, banneroffset, module_uptime_init, (void*)&sinfo_buf);
+	modprint(&i, bannerlen, banneroffset, module_mnts_init, (void*)&banneroffset);
 
 	return 0;
 }
