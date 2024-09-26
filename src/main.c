@@ -17,6 +17,7 @@
 #include "ram.h"
 #include "uptime.h"
 #include "mnts.h"
+#include "palette.h"
 
 static void hmodprint(size_t, void (*)(void*), void *prm);
 static void modprint(int*, size_t, size_t, void (*)(void*), void *prm);
@@ -104,6 +105,7 @@ int main()
 	modprint(&i, bannerlen, banneroffset, module_ram_init, NULL);
 	modprint(&i, bannerlen, banneroffset, module_uptime_init, (void*)&sinfo_buf);
 	modprint(&i, bannerlen, banneroffset, module_mnts_init, (void*)&banneroffset);
+	modprint(&i, bannerlen, banneroffset, module_palette_init, NULL);
 
 	return 0;
 }
