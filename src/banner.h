@@ -1,4 +1,10 @@
-#pragma once
+#ifndef BANNER_H_
+#define BANNER_H_
 
-char (*get_banner(void))[50];
-void prbannerrow(int r);
+static char banner[][10] = {
+	"(\\__/)",
+	"(='.'=)",
+	"(\")_(\")"
+};
+
+#endif

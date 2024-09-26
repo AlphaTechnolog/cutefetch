@@ -1,3 +1,4 @@
-obj
-bin
+cutefetch
+**/*.o
 *.o
+*.swp

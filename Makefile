@@ -1,41 +1,18 @@
-MINGW := $(shell expr "$(UNAME_S)" : 'MINGW')
+CC=gcc
 
-CFLAGS := -std=c11 -O3 -g -Wall -Wextra -Wpedantic -Wstrict-aliasing
-CFLAGS += -Wno-pointer-arith -Wno-unused-parameter -Wno-newline-eof -Wno-unused-parameter -Wno-gnu-statement-expression
-CFLAGS += -Wno-gnu-compound-literal-initializer -Wno-gnu-zero-variadic-macro-arguments
+CFLAGS=-Wall -std=c89 -O3
+LDFLAGS=
 
-LDFLAGS := -lc -lm
-DESTDIR := /usr/bin
+SRCS=$(wildcard src/**/*.c src/*.c src/**/**/*.c)
+OBJS=$(SRCS:.c=.o)
 
-SRC := $(wildcard src/**/*.c) $(wildcard src/*.c) $(wildcard src/**/**/*.c) $(wildcard src/**/**/**/*.c)
-OBJ := $(SRC:.c=.o)
-BIN := bin
+OUTPUT=cutefetch
 
-APPNAME := cutefetch
-
-.PHONY: all clean
-
-all: dirs app
-
-dirs:
-	mkdir -p $(BIN)
-
-run: all
-	$(BIN)/$(APPNAME)
-
-app: $(OBJ)
-	$(CC) -o $(BIN)/$(APPNAME) $^ $(LDFLAGS)
-	strip $(BIN)/$(APPNAME)
+$(OUTPUT): $(OBJS)
+	$(CC) -o $@ $^ $(LDFLAGS)
 
 %.o: %.c
-	$(CC) -o $@ -c $< $(CFLAGS)
+	$(CC) -c -o $@ $< $(CFLAGS)
 
-clean:
-	rm -rf $(BIN) $(OBJ)
-
-install: $(BIN)/$(APPNAME)
-	mkdir -pv $(DESTDIR)
-	install -Dm755 $< $(DESTDIR)/$(APPNAME)
-
-uninstall:
-	rm -fv $(DESTDIR)/$(APPNAME)
+clean: $(OUTPUT) $(OBJS)
+	rm $^

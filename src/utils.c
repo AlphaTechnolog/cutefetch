@@ -3,5 +3,11 @@
 
 #include "utils.h"
 
-FUN_CHECK(malloc)
-FUN_CHECK(realloc)
+/**
+ * Calls perror(reason) and then exits.
+ */
+void die(const char *reason)
+{
+	perror(reason);
+	exit(EXIT_FAILURE);
+}

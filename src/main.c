@@ -1,51 +1,103 @@
 #include <stdio.h>
 #include <string.h>
+#include <unistd.h>
 
+#include "macro_utils.h"
 #include "banner.h"
-#include "header.h"
+#include "colors.h"
 
-#include "system/os.h"
-#include "system/kernel.h"
-#include "system/ram.h"
-#include "system/hostname.h"
-#include "system/disk.h"
+/* modules */
+#include "hostname.h"
+#include "distro.h"
 
-void display_colorpalette(void);
+static void printxtimes(size_t, char);
+static void hmodprint(size_t, void (*)(void));
+static void modprint(int*, size_t, size_t, void (*)(void));
 
-int main() {
-	char (*banner)[50] = get_banner();
-	size_t max_len = 0;
-	for (int i = 0; i < 3; i++)
-		if (strlen(banner[i]) > max_len)
-			max_len = strlen(banner[i]);
+/**
+ * Prints a given character x times.
+ *
+ * NOTE: Doesn't appends \n in stdout.
+ *
+ * size_t times: Times to print `chr`.
+ * char chr: Character to print.
+ */
+void printxtimes(size_t times, char chr)
+{
+	int i;
+	char fmtted[2];
 
-	for (size_t i = 0; i < max_len; i++)
-		printf(" ");
+	fmtted[0] = chr;
+	fmtted[1] = '\0';
 
-	header();
+	for (i = 0; i < times; ++i)
+		fputs(fmtted, stdout);
+}
 
-	// rendering the aligneds functions relative to the banner size.
-	void (*aligneds[3])() = {os, kernel, hostname};
-	for (int i = 0; i < 3; i++) {
-		prbannerrow(i);
-		aligneds[i]();
-	}
+/**
+ * Prints a given module without printing its current banner iteration.
+ *
+ * size_t offsethint: The length of hugest row in the banner.
+ * void (*modfn)(void): Module function.
+ */
+void hmodprint(size_t offsethint, void (*modfn)(void))
+{
+	printxtimes(offsethint + 1, ' ');
+	modfn();
+}
 
-	// rendering the missaligneds ones
-	#define MISSALIGNED_SIZE 2
+/**
+ * Prints a given module by maintaining the alignment between outputs.
+ *
+ * int *idxptr: Pointer to the current module index integer value.
+ * size_t maxrows: Maximum number of rows that the banner can provide.
+ * size_t offsethint: The length of the hugest row in the banner.
+ * void (*modfn)(void): Module function.
+ */
+void modprint(int *idxptr, size_t maxrows, size_t offsethint, void (*modfn)(void))
+{
+	int idx, i;
+	char row[offsethint + 1];
 
-	void (*missaligneds[MISSALIGNED_SIZE])(size_t offset) = {ram, disk};
-	for (int i = 0; i < MISSALIGNED_SIZE; i++) {
-		for (size_t j = 0; j < max_len; j++)
-			printf(" ");
-		missaligneds[i](max_len);
-	}
+	idx = *idxptr;
+	strncpy(row, idx > maxrows ? "" : banner[idx], offsethint + 1);
+	*idxptr = idx + 1;
 
-	for (size_t i = 0; i < max_len; i++)
-		printf(" ");
+	/* printing char by char so we can color it a little bit */
+	for (i = 0; row[i] != '\0'; ++i)
+		switch (row[i]) {
+			case '=':
+				printf("%s%c%s", YELLOW, row[i], RESET);
+				break;
+			case '"':
+				printf("%s%c%s", RED, row[i], RESET);
+				break;
+			default:
+				printf("%c", row[i]);
+				break;
+		}
 
-	printf(" ");
-	display_colorpalette();
+	/* printing needed spaces to align modules outputs. */
+	printxtimes(offsethint - strlen(row) + 1, ' ');
+
+	modfn();
+}
+
+
+int main()
+{
+	int i;
+	size_t bannerlen, banneroffset;
+
+	bannerlen = sizeof(banner) / sizeof(banner[1]);
+
+	for (i = 0, banneroffset = 0; i < bannerlen; ++i)
+		banneroffset = MAX(banneroffset, strlen(banner[i]));
+
+	i = 0;
+
+	hmodprint(banneroffset, module_hostname_init);
+	modprint(&i, bannerlen, banneroffset, module_distro_init);
 
 	return 0;
 }
