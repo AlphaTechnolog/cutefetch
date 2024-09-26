@@ -28,6 +28,8 @@ void module_ram_init(void *prm)
 		}
 	}
 
+	fclose(fp);
+
 	usedram = totalram - freeram;
 
 	format_bytes(totalram, ftotalram);
