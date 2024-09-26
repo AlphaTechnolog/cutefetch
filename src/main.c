@@ -111,6 +111,7 @@ int main()
 	modprint(&i, bannerlen, banneroffset, module_distro_init, NULL);
 	modprint(&i, bannerlen, banneroffset, module_kernel_init, (void*)&sutsname_buf);
 	modprint(&i, bannerlen, banneroffset, module_arch_init, (void*)&sutsname_buf);
+	modprint(&i, bannerlen, banneroffset, module_simple_hostname_init, NULL);
 
 	return 0;
 }

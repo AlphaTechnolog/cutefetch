@@ -33,3 +33,16 @@ void module_hostname_init(void *prm)
 	printf("%s%s%s@%s%s%s\n", CYAN, username, BLUE,
 		MAGENTA, hostname, RESET);
 }
+
+/**
+ * Entry point for the hostname module, this prints
+ * the hs: <hostname> part.
+ *
+ * void *prm: Unused parameter
+ */
+void module_simple_hostname_init(void *prm)
+{
+	char hostname[100];
+	gethostname(hostname, 100);
+	printf("%shs%s   %s\n", CYAN, RESET, hostname);
+}
