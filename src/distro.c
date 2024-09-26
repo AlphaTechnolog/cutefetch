@@ -1,7 +1,6 @@
 #define _DEFAULT_SOURCE
 
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 
 #include "distro.h"
@@ -25,11 +24,9 @@ void module_distro_init(void *prm)
 	if (!(fp = fopen("/etc/os-release", "r")))
 		die("fopen");
 
-	while ((line = fgets(line_buf, sizeof(line_buf), fp))) {
-		if (sscanf(line, "PRETTY_NAME=\"%[^\"]\"", pretty_name)) {
+	while ((line = fgets(line_buf, sizeof(line_buf), fp)))
+		if (sscanf(line, "PRETTY_NAME=\"%[^\"]\"", pretty_name))
 			break;
-		}
-	}
 
 	fclose(fp);
 
