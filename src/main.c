@@ -32,10 +32,7 @@ static void modprint(int*, size_t, size_t, void (*)(void*), void *prm);
 void printxtimes(size_t times, char chr)
 {
 	int i;
-	char fmtted[2];
-
-	fmtted[0] = chr;
-	fmtted[1] = '\0';
+	char fmtted[] = { chr, 0 };
 
 	for (i = 0; i < times; ++i)
 		fputs(fmtted, stdout);
