@@ -13,6 +13,7 @@
 #include "distro.h"
 #include "kernel.h"
 #include "arch.h"
+#include "ram.h"
 
 static void printxtimes(size_t, char);
 static void hmodprint(size_t, void (*)(void*), void *prm);
@@ -108,10 +109,12 @@ int main()
 	i = 0;
 
 	hmodprint(banneroffset, module_hostname_init, NULL);
+
 	modprint(&i, bannerlen, banneroffset, module_distro_init, NULL);
 	modprint(&i, bannerlen, banneroffset, module_kernel_init, (void*)&sutsname_buf);
 	modprint(&i, bannerlen, banneroffset, module_arch_init, (void*)&sutsname_buf);
 	modprint(&i, bannerlen, banneroffset, module_simple_hostname_init, NULL);
+	modprint(&i, bannerlen, banneroffset, module_ram_init, NULL);
 
 	return 0;
 }
