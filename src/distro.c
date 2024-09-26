@@ -18,7 +18,7 @@
 void module_distro_init(void *prm)
 {
 	FILE *fp;
-	char *line, line_buf[100], pretty_name[20];
+	char *line, line_buf[100], pretty_name[40];
 
 	strlcpy(pretty_name, "Unavailable", sizeof(pretty_name));
 
@@ -26,17 +26,7 @@ void module_distro_init(void *prm)
 		die("fopen");
 
 	while ((line = fgets(line_buf, sizeof(line_buf), fp))) {
-		if (STR_STARTSWITH(line, "PRETTY_NAME")) {
-			char *cur;
-
-			/* if can't be found, we're just gonna leave it as Unavailable */
-			if (!(cur = strchr(line, '"')))
-				break;
-
-			/* copy the cursor without the leading " in the start and the end */
-			if (cur[0] == '"') cur++;
-			strlcpy(pretty_name, cur, strlen(cur) - 1);
-
+		if (sscanf(line, "PRETTY_NAME=\"%[^\"]\"", pretty_name)) {
 			break;
 		}
 	}
