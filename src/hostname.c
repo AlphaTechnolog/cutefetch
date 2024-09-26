@@ -12,8 +12,10 @@
 /**
  * Entry point for the hostname module, this prints
  * the <user>@<hostname> part.
+ *
+ * void *prm: Unused parameter
  */
-void module_hostname_init(void)
+void module_hostname_init(void *prm)
 {
 	char hostname[100], username[100];
 	uid_t uid;

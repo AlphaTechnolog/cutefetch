@@ -2,5 +2,6 @@
 #define UTILS_H_
 
 void die(const char *reason);
+void fatal(const char *reason);
 
 #endif

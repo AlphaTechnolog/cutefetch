@@ -1,7 +1,9 @@
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
+#include <sys/utsname.h>
 
+#include "utils.h"
 #include "macro_utils.h"
 #include "banner.h"
 #include "colors.h"
@@ -9,10 +11,11 @@
 /* modules */
 #include "hostname.h"
 #include "distro.h"
+#include "kernel.h"
 
 static void printxtimes(size_t, char);
-static void hmodprint(size_t, void (*)(void));
-static void modprint(int*, size_t, size_t, void (*)(void));
+static void hmodprint(size_t, void (*)(void*), void *prm);
+static void modprint(int*, size_t, size_t, void (*)(void*), void *prm);
 
 /**
  * Prints a given character x times.
@@ -38,12 +41,13 @@ void printxtimes(size_t times, char chr)
  * Prints a given module without printing its current banner iteration.
  *
  * size_t offsethint: The length of hugest row in the banner.
- * void (*modfn)(void): Module function.
+ * void (*modfn)(void*): Module function.
+ * void *prm: The parameter to pass to the module function.
  */
-void hmodprint(size_t offsethint, void (*modfn)(void))
+void hmodprint(size_t offsethint, void (*modfn)(void*), void *prm)
 {
 	printxtimes(offsethint + 1, ' ');
-	modfn();
+	modfn(prm);
 }
 
 /**
@@ -52,9 +56,10 @@ void hmodprint(size_t offsethint, void (*modfn)(void))
  * int *idxptr: Pointer to the current module index integer value.
  * size_t maxrows: Maximum number of rows that the banner can provide.
  * size_t offsethint: The length of the hugest row in the banner.
- * void (*modfn)(void): Module function.
+ * void (*modfn)(void*): Module function.
+ * void *prm: The parameter to pass to the module function.
  */
-void modprint(int *idxptr, size_t maxrows, size_t offsethint, void (*modfn)(void))
+void modprint(int *idxptr, size_t maxrows, size_t offsethint, void (*modfn)(void*), void *prm)
 {
 	int idx, i;
 	char row[offsethint + 1];
@@ -80,7 +85,7 @@ void modprint(int *idxptr, size_t maxrows, size_t offsethint, void (*modfn)(void
 	/* printing needed spaces to align modules outputs. */
 	printxtimes(offsethint - strlen(row) + 1, ' ');
 
-	modfn();
+	modfn(prm);
 }
 
 
@@ -88,6 +93,11 @@ int main()
 {
 	int i;
 	size_t bannerlen, banneroffset;
+	struct utsname sutsname_buf;
+
+	/* populate shared utsname buffer structure */
+	if (uname(&sutsname_buf) != 0)
+		die("uname");
 
 	bannerlen = sizeof(banner) / sizeof(banner[1]);
 
@@ -96,8 +106,9 @@ int main()
 
 	i = 0;
 
-	hmodprint(banneroffset, module_hostname_init);
-	modprint(&i, bannerlen, banneroffset, module_distro_init);
+	hmodprint(banneroffset, module_hostname_init, NULL);
+	modprint(&i, bannerlen, banneroffset, module_distro_init, NULL);
+	modprint(&i, bannerlen, banneroffset, module_kernel_init, (void*)&sutsname_buf);
 
 	return 0;
 }

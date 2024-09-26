@@ -12,8 +12,10 @@
 /**
  * The entry point for the distro module. This prints
  * the os: <distro> part.
+ *
+ * void *prm: Unused parameter
  */
-void module_distro_init(void)
+void module_distro_init(void *prm)
 {
 	FILE *fp;
 	char *line, line_buf[100], pretty_name[20];
