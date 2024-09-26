@@ -2,6 +2,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <sys/utsname.h>
+#include <sys/sysinfo.h>
 
 #include "utils.h"
 #include "macro_utils.h"
@@ -14,6 +15,7 @@
 #include "kernel.h"
 #include "arch.h"
 #include "ram.h"
+#include "uptime.h"
 
 static void printxtimes(size_t, char);
 static void hmodprint(size_t, void (*)(void*), void *prm);
@@ -96,10 +98,15 @@ int main()
 	int i;
 	size_t bannerlen, banneroffset;
 	struct utsname sutsname_buf;
+	struct sysinfo sinfo_buf;
 
 	/* populate shared utsname buffer structure */
 	if (uname(&sutsname_buf) != 0)
 		die("uname");
+
+	/* populate a shared sysinfo buffer ds */
+	if (sysinfo(&sinfo_buf) != 0)
+		die("sysinfo");
 
 	bannerlen = sizeof(banner) / sizeof(banner[1]);
 
@@ -115,6 +122,7 @@ int main()
 	modprint(&i, bannerlen, banneroffset, module_arch_init, (void*)&sutsname_buf);
 	modprint(&i, bannerlen, banneroffset, module_simple_hostname_init, NULL);
 	modprint(&i, bannerlen, banneroffset, module_ram_init, NULL);
+	modprint(&i, bannerlen, banneroffset, module_uptime_init, (void*)&sinfo_buf);
 
 	return 0;
 }

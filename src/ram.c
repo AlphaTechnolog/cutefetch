@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 
 #include "ram.h"
@@ -16,7 +15,7 @@ void module_ram_init(void *prm)
 {
 	FILE *fp;
 	unsigned long totalram = 0, usedram = 0, freeram = 0;
-	char *ftotalram, *fusedram, *line, linebuf[256];
+	char ftotalram[60], fusedram[60], *line, linebuf[256];
 
 	if (!(fp = fopen("/proc/meminfo", "r")))
 		die("fopen");
@@ -31,11 +30,8 @@ void module_ram_init(void *prm)
 
 	usedram = totalram - freeram;
 
-	ftotalram = format_bytes(totalram);
-	fusedram = format_bytes(usedram);
+	format_bytes(totalram, ftotalram);
+	format_bytes(usedram, fusedram);
 
-	printf("%sram%s  %s / %s\n", RED, RESET, fusedram, ftotalram);
-
-	free(ftotalram);
-	free(fusedram);
+	printf("%sram%s  %s / %s\n", MAGENTA, RESET, fusedram, ftotalram);
 }

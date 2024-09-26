@@ -31,17 +31,14 @@ void fatal(const char *reason)
  * by trying to guess wether it's more suitable to use either gb, tb, mb, kb, etc.
  * NOTE: The caller is responsible for free()ing the result.
  *
- * long unsigned bytes: The bytes to format
+ * long unsigned bytes: The bytes to format.
+ * char *buf: The buffer to fill with the string.
  */
-char *format_bytes(long unsigned bytes)
+void format_bytes(long unsigned bytes, char *buf)
 {
         const char* units[] = {"B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"};
-	char *buf;
         size_t i = 0;
         double val = (double) bytes;
-
-	if (!(buf = malloc(60)))
-		die("malloc");
 
         while (val >= 1024.0 && i < sizeof(units) / sizeof(units[0])) {
                 val /= 1024.0;
@@ -49,6 +46,27 @@ char *format_bytes(long unsigned bytes)
         }
 
         sprintf(buf, "%.2f %s", val, units[i]);
+}
 
-        return buf;
+/**
+ * Given a milliseconds amount, this function will return a string with the formatted output
+ * by using a proper long format.
+ *
+ * long unsigned milliseconds: The milliseconds amount to format.
+ * char *buf: The string buffer to fill in.
+ */
+void format_time(long unsigned milliseconds, char *buf)
+{
+	int seconds, minutes, hours;
+
+	seconds = (milliseconds / 1000) % 60;
+	minutes = (milliseconds / (1000 * 60)) % 60;
+	hours = (milliseconds / (1000 * 60 * 60)) % 24;
+
+	if (hours > 0)
+		sprintf(buf, "%d hour(s), %d minute(s), %d second(s)", hours, minutes, seconds);
+	else if (minutes > 0)
+		sprintf(buf, "%d minute(s), %d second(s)", minutes, seconds);
+	else
+		sprintf(buf, "%d second(s)", seconds);
 }
