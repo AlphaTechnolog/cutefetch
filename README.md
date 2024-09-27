@@ -12,19 +12,17 @@ relevant information about your current running system.
 - Bunny banner
 - Os name
 - Kernel version
-- Current used ram
+- CPU Arch
 - Hostname
+- Used ram
+- Uptime
 - Disk: Used disk space / Total disk space (Shows mountpoints)
-- Color palette
+- Color palette squares
 
 ## Requirements
 
-- gcc / clang
-- gnumake
-- git
-- sudo
-- uname (you should have it already installed)
-- your hostname at /etc/hostname (you may already have that file there)
+- A working c compiler, cutefetch is c89 compliant so it could probably build in most c compilers out there.
+- An implementation of make, either it's gnumake or bsd make, etc.
 - A nerd font (to correctly render the glyphs at the color palette)
 
 ## Installation
@@ -39,8 +37,13 @@ yay -S cutefetch
 
 ### NixOS
 
-For NixOS you could use the provided flake and then install the exposed package in the default
-overlay. Take as reference the next dev shell which provides a cutefetch installation.
+This repository provides a nix flake which allows you to use cutefetch with nix easily. Try it out by going ahead to your terminal and type:
+
+```sh
+nix run github:AlphaTechnolog/cutefetch
+```
+
+Take as reference the next dev shell which provides a cutefetch installation, you could put the cutefetch pkg in your environment.systemPackages or home.pkgs to install system wide if you want to do so.
 
 ```nix
 {
@@ -106,29 +109,44 @@ Run a little list of shell script commands.
 ```sh
 mkdir -pv ~/repo && cd ~/repo
 git clone https://github.com/AlphaTechnolog/cutefetch.git && cd cutefetch
+make
 sudo make install
 ```
 
-Then just run in your terminal `cutefetch`, and you'll see the cute bunny appearing
-in your terminal screen :)
+Then just run in your terminal `cutefetch`, and you should see the proper cutefetch output.
 
 ## Compilation tricks
 
-You may want to build it using clang, you can do it by overriding the
+You may want to build it using another compiler, you can do it by overriding the
 `CC` variable:
 
 ```sh
-sudo make CC=clang DESTDIR=/usr/bin all install
+make CC=tcc
+sudo make install
 ```
 
-You can also set a destdir on where you wanna install cutefetch.
+You can also specify where the cutefetch binary will be installed and at which prefix by overriding the DESTDIR and the PREFIX vars.
 
 ```sh
-sudo make DESTDIR=/usr/bin install
-sudo make DESTDIR=/usr/local/bin install
-sudo make DESTIDR=/usr/local/bin uninstall
-# ...
+mkdir ~/rootfs
+make DESTDIR=~/rootfs PREFIX=/customprefix install
 ```
+
+That will generate something like this:
+
+```
+/home/alpha/rootfs/
+└── customprefix
+    └── bin
+        └── cutefetch
+
+3 directories, 1 file
+```
+
+The default values for these variables are:
+
+- `DESTDIR`: `/` so it gets installed at the root dir.
+- `PREFIX`: `/usr` so it gets installed at /usr/bin.
 
 ## Dev notes
 
@@ -136,18 +154,6 @@ sudo make DESTIDR=/usr/local/bin uninstall
 
 ```sh
 make clean
-```
-
-> if you already have ran `sudo make install` without having the program compiled you may have to run
-
-```sh
-sudo make clean
-```
-
-- Fresh compilation
-
-```sh
-make clean all
 ```
 
 ## Thanks to
