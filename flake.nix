@@ -9,7 +9,10 @@
   outputs = inputs:
     inputs.flake-utils.lib.eachDefaultSystem (system: let
       getOutputs = import ./nix/outputs.nix;
-    in (getOutputs {
-      inherit inputs system;
-    }));
+    in (
+        getOutputs {
+          inherit inputs system;
+        }
+      )
+    );
 }

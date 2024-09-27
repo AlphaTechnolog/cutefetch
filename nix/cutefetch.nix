@@ -1,9 +1,9 @@
 {
-  stdenv,
-  pkgs,
-  lib,
-  ...
+  pkgs ? import <nixpkgs> {},
+  lib ? pkgs.lib,
+  stdenv ? pkgs.stdenv,
 }:
+
 stdenv.mkDerivation {
   pname = "cutefetch";
   version = "git";
@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   ];
 
   installPhase = ''
-    make DESTDIR=$out/bin install
+    make PREFIX=/ DESTDIR=$out install
   '';
 
   meta = with lib; {

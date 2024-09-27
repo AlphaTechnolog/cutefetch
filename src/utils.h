@@ -1,13 +1,10 @@
-#pragma once
+#ifndef UTILS_H_
+#define UTILS_H_
 
-#define FUN_CHECK(fn) \
-    inline void fn##_check(void *res) { \
-        if (!res) { \
-            perror(#fn); \
-            exit(EXIT_FAILURE); \
-        } \
-    }
+void die(const char*);
+void fatal(const char*);
+void format_bytes(long unsigned, char*);
+void format_time(long unsigned, char*);
+void printxtimes(size_t, char);
 
-
-void malloc_check(void *res);
-void realloc_check(void *res);
+#endif
