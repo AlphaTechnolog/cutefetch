@@ -99,6 +99,10 @@ void module_mnts_init(void *prm)
 		display_mnt(cursor);
 		i++;
 	}
+	
+	if (i == 0) {
+		printf("unavailable\n");
+	}
 
 	endfsent();
 }
