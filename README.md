@@ -24,6 +24,7 @@ relevant information about your current running system.
 - A working c compiler, cutefetch is c89 compliant so it could probably build in most c compilers out there.
 - An implementation of make, either it's gnumake or bsd make, etc.
 - A nerd font (to correctly render the glyphs at the color palette)
+- On debian you'll probably need to install the pkg `libbsd-dev` since we rely on `strlcpy`
 
 ## Installation
 
