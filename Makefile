@@ -1,7 +1,7 @@
 CC=gcc
 
-CFLAGS=-Wall -std=c89 -O3
-LDFLAGS=
+CFLAGS=-Wall -std=c89 -O3 $(shell pkg-config --cflags libbsd-overlay)
+LDFLAGS=$(shell pkg-config --libs libbsd-overlay)
 
 DESTDIR := /
 PREFIX := /usr
