@@ -21,7 +21,8 @@ clean: $(OUTPUT) $(OBJS)
 	rm $^
 
 $(DESTDIR)/$(PREFIX)/bin/$(OUTPUT): $(OUTPUT)
-	install -Dvm755 $^ $@
+	cp $^ $@
+	chmod +x $^
 
 install: $(DESTDIR)/$(PREFIX)/bin/$(OUTPUT)
 
