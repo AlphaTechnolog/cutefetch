@@ -2,7 +2,13 @@
 #include <string.h>
 #include <unistd.h>
 #include <sys/utsname.h>
+#ifdef __APPLE__
+#include <sys/sysctl.h>
+#include <mach/mach.h>
+#include <mach/vm_statistics.h>
+#else
 #include <sys/sysinfo.h>
+#endif
 
 #include "utils.h"
 #include "macro_utils.h"
@@ -79,15 +85,23 @@ int main()
 	int i;
 	size_t bannerlen, banneroffset;
 	struct utsname sutsname_buf;
+#ifdef __APPLE__
+	struct timespec boottime;
+#else
 	struct sysinfo sinfo_buf;
+#endif
 
 	/* populate shared utsname buffer structure */
 	if (uname(&sutsname_buf) != 0)
 		die("uname");
 
-	/* populate a shared sysinfo buffer ds */
+#ifdef __APPLE__
+	if (sysctlbyname("kern.boottime", &boottime, &(size_t){sizeof(boottime)}, NULL, 0) != 0)
+		die("sysctlbyname");
+#else
 	if (sysinfo(&sinfo_buf) != 0)
 		die("sysinfo");
+#endif
 
 	bannerlen = sizeof(banner) / sizeof(banner[1]);
 
@@ -103,7 +117,11 @@ int main()
 	modprint(&i, bannerlen, banneroffset, module_arch_init, (void*)&sutsname_buf);
 	modprint(&i, bannerlen, banneroffset, module_simple_hostname_init, NULL);
 	modprint(&i, bannerlen, banneroffset, module_ram_init, NULL);
+#ifdef __APPLE__
+	modprint(&i, bannerlen, banneroffset, module_uptime_init, (void*)&boottime);
+#else
 	modprint(&i, bannerlen, banneroffset, module_uptime_init, (void*)&sinfo_buf);
+#endif
 	modprint(&i, bannerlen, banneroffset, module_mnts_init, (void*)&banneroffset);
 	modprint(&i, bannerlen, banneroffset, module_palette_init, NULL);
 
