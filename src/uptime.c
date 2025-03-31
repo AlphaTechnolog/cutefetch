@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <stdlib.h>
 #ifdef __APPLE__
 #include <time.h>
 #else
