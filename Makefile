@@ -21,8 +21,9 @@ clean: $(OUTPUT) $(OBJS)
 	rm $^
 
 $(DESTDIR)/$(PREFIX)/bin/$(OUTPUT): $(OUTPUT)
-	cp $^ $@
-	chmod +x $^
+	mkdir -pv $(DESTDIR)/$(PREFIX)/bin
+	cp $< $@
+	chmod +x $@
 
 install: $(DESTDIR)/$(PREFIX)/bin/$(OUTPUT)
 
