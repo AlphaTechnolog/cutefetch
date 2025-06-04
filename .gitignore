@@ -2,3 +2,4 @@ cutefetch
 **/*.o
 *.o
 *.swp
+.DS_Store
