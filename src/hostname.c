@@ -6,6 +6,7 @@
 #include <unistd.h>
 #include <string.h>
 
+#include "strlcpy.h"
 #include "hostname.h"
 #include "colors.h"
 

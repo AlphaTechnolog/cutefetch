@@ -6,6 +6,7 @@
 #include <sys/sysctl.h>
 #endif
 
+#include "strlcpy.h"
 #include "distro.h"
 #include "colors.h"
 #include "utils.h"
