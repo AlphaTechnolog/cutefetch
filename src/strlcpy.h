@@ -1,10 +1,10 @@
 #ifndef _STRLCPY_H_
 #define _STRLCPY_H_
 
-#ifndef HAVE_STRLCAT
+#ifndef strlcat
 size_t strlcat(char *dst, const char *src, size_t size);
 #endif
-#ifndef HAVE_STRLCPY
+#ifndef strlcpy
 size_t strlcpy(char *dst, const char *src, size_t size);
 #endif
 

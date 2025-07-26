@@ -2,7 +2,7 @@
 
 #include "strlcpy.h"
 
-#ifndef HAVE_STRLCAT
+#ifndef strlcat
 size_t strlcat(char *dst, const char *src, size_t size) {
 	size_t srclen;
 	size_t dstlen;
@@ -21,7 +21,7 @@ size_t strlcat(char *dst, const char *src, size_t size) {
 }
 #endif
 
-#ifndef HAVE_STRLCPY
+#ifndef strlcpy
 size_t strlcpy(char *dst, const char *src, size_t size) {
 	size_t srclen;
 
