@@ -95,7 +95,7 @@ void module_mnts_init(void *prm)
 
 	while ((cursor = getfsent()) != NULL) {
 		if (strcmp(cursor->fs_vfstype, "swap") == 0) continue;
-		if (i > 0) printxtimes(*banneroffset + strlen(prefix) + 3, ' ');
+		if (i > 0) printxtimes(*banneroffset + strlen(prefix) + 2, ' ');
 		display_mnt(cursor);
 		i++;
 	}
