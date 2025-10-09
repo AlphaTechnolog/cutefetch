@@ -84,14 +84,14 @@ void module_mnts_init(void *prm)
 	struct fstab *cursor;
 	size_t *banneroffset;
 	int i = 0;
-	const char *prefix = "dsk";
+	const char *prefix = "mnts";
 
 	banneroffset = (size_t*)prm;
 
 	if (setfsent() != 1)
 		die("setfsent");
 
-	printf("%s%s%s  ", RED, prefix, RESET);
+	printf("%s%s%s ", RED, prefix, RESET);
 
 	while ((cursor = getfsent()) != NULL) {
 		if (strcmp(cursor->fs_vfstype, "swap") == 0) continue;
