@@ -57,18 +57,22 @@ void format_bytes(long unsigned bytes, char *buf)
  */
 void format_time(long unsigned milliseconds, char *buf)
 {
-	int seconds, minutes, hours;
+	unsigned long long total_seconds = milliseconds / 1000ULL;
+	unsigned int days, hours, minutes, seconds;
 
-	seconds = (milliseconds / 1000) % 60;
-	minutes = (milliseconds / (1000 * 60)) % 60;
-	hours = (milliseconds / (1000 * 60 * 60)) % 24;
+	days = (unsigned int)(total_seconds / 86400ULL);
+	hours = (unsigned int)((total_seconds % 86400ULL) / 3600ULL);
+	minutes = (unsigned int)((total_seconds % 3600ULL) / 60ULL);
+	seconds = (unsigned int)(total_seconds % 60ULL);
 
-	if (hours > 0)
-		sprintf(buf, "%d hour(s), %d minute(s), %d second(s)", hours, minutes, seconds);
+	if (days > 0)
+		sprintf(buf, "%u day(s), %u hour(s), %u minute(s), %u second(s)", days, hours, minutes, seconds);
+	else if (hours > 0)
+		sprintf(buf, "%u hour(s), %u minute(s), %u second(s)", hours, minutes, seconds);
 	else if (minutes > 0)
-		sprintf(buf, "%d minute(s), %d second(s)", minutes, seconds);
+		sprintf(buf, "%u minute(s), %u second(s)", minutes, seconds);
 	else
-		sprintf(buf, "%d second(s)", seconds);
+		sprintf(buf, "%u second(s)", seconds);
 }
 
 /**
